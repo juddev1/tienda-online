@@ -10,7 +10,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
    <!-- site metas -->
-   <title>Vida Informático</title>
+   <title>Jappi Beer</title>
    <meta name="keywords" content="">
    <meta name="description" content="">
    <meta name="author" content="">
@@ -52,19 +52,7 @@
    <!-- banner bg main start -->
    <div class="banner_bg_main">
       <!-- header top section start -->
-      <div class="container">
-         <div class="header_section_top">
-            <div class="row">
-               <div class="col-sm-12">
-                  <div class="custom_menu">
-                     <ul>
-                        <li><a href="https://informatica-programacion.com/">Vida Informático</a></li>
-                     </ul>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
+      
       <!-- header top section start -->
       <!-- logo section start -->
       <div class="logo_section">

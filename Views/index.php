@@ -8,24 +8,24 @@
         <div class="carousel-item active">
           <div class="row">
             <div class="col-sm-12">
-              <h1 class="banner_taital">Get Start <br>Your favriot shoping</h1>
-              <div class="buynow_bt"><a href="#">Buy Now</a></div>
+              <h1 class="banner_taital">TIENDA <br>JAPPI BEER</h1>
+              <div class="buynow_bt"><a href="#">COMPRAR AHORA</a></div>
             </div>
           </div>
         </div>
         <div class="carousel-item">
           <div class="row">
             <div class="col-sm-12">
-              <h1 class="banner_taital">Get Start <br>Your favriot shoping</h1>
-              <div class="buynow_bt"><a href="#">Buy Now</a></div>
+              <h1 class="banner_taital">EMPIEZA <br>CON NOSOTROS</h1>
+              <div class="buynow_bt"><a href="#">COMPRAR AHORA</a></div>
             </div>
           </div>
         </div>
         <div class="carousel-item">
           <div class="row">
             <div class="col-sm-12">
-              <h1 class="banner_taital">Get Start <br>Your favriot shoping</h1>
-              <div class="buynow_bt"><a href="#">Buy Now</a></div>
+              <h1 class="banner_taital">SOMOS <br>LOS MEJORES</h1>
+              <div class="buynow_bt"><a href="#">Comprar ahora</a></div>
             </div>
           </div>
         </div>
