@@ -100,6 +100,10 @@
                <div class="header_box">
                   <div class="login_menu">
                      <ul>
+                     <li><a href="<?php echo BASE_URL; ?>personalizar">
+               <i class="fa fa-paint-brush" aria-hidden="true"></i>
+               <span class="padding_10">Personalizar</span></a>
+         </li>
                         <li><a href="#" id="verCarrito">
                               <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                               <span class="padding_10" id="btnCantidadCarrito">Cart</span></a>
