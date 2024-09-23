@@ -1,49 +1,18 @@
+<!-- Views/personalizar.php -->
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Personalización de Producto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalizar</title>
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css">
 </head>
 <body>
-
-<h1>Personaliza tu Producto</h1>
-
-<form id="formPersonalizar">
-    <label for="customText">Texto personalizado:</label>
-    <input type="text" id="customText" name="customText">
-
-    <label for="customImage">Subir imagen personalizada:</label>
-    <input type="file" id="customImage" name="customImage">
-
-    <button type="submit">Personalizar</button>
-</form>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    $(document).ready(function(){
-        $('#formPersonalizar').on('submit', function(event) {
-            event.preventDefault();
-
-            var formData = new FormData(this);
-            $.ajax({
-                url: "<?php echo BASE_URL; ?>personalizar/saveCustom", // Llamada al controlador PHP
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    // Manejar la respuesta de PHP
-                    console.log("Respuesta del servidor:", response);
-                    alert("Personalización realizada con éxito.");
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log("Error:", textStatus, errorThrown);
-                    alert("Error al realizar la personalización.");
-                }
-            });
-        });
-    });
-</script>
-
+    <?php include_once 'template/header-principal.php'; ?>
+    <div class="container">
+        <h1>Bienvenido a la página de personalización</h1>
+        <!-- Contenido de la página -->
+    </div>
+    <?php include_once 'template/footer-principal.php'; ?>
 </body>
 </html>

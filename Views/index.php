@@ -1,5 +1,6 @@
 <?php include_once 'Views/template/header-principal.php'; ?>
 
+
 <!-- banner section start -->
 <div class="banner_section layout_padding">
   <div class="container">
@@ -10,10 +11,6 @@
             <div class="col-sm-12">
               <h1 class="banner_taital">TIENDA <br>JAPPI BEER</h1>
               <div class="buynow_bt"><a href="#">COMPRAR AHORA</a></div>
-              <div class="buynow_bt">
-  <a href="<?php echo BASE_URL . 'personalizar'; ?>">Personalizar Productos</a>
-</div>
-
             </div>
           </div>
         </div>

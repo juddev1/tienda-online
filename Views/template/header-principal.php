@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -100,7 +101,7 @@
                <div class="header_box">
                   <div class="login_menu">
                      <ul>
-                     <li><a href="<?php echo BASE_URL; ?>personalizar">
+                     <li><a href="<?php echo BASE_URL; ?>index.php?url=personalizar/index">
                <i class="fa fa-paint-brush" aria-hidden="true"></i>
                <span class="padding_10">Personalizar</span></a>
          </li>
