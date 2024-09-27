@@ -6,22 +6,71 @@ class PersonalizarModel extends Query {
         parent::__construct(); // Llamar al constructor de la clase padre
     }
 
-    public function saveImagePath($fileName) {
-        try {
-            $sql = "INSERT INTO images (image_path) VALUES (:image_path)";
-            $stmt = $this->db->prepare($sql); // Asegúrate de tener acceso a la conexión de base de datos
-            $stmt->bindParam(':image_path', $fileName);
-            if (!$stmt->execute()) {
-                throw new Exception('Error al guardar la ruta de la imagen.');
-            }
-            return true; // Retorna true si se guardó correctamente
-        } catch (Exception $e) {
-            // Manejo de errores
-            echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
-            return false; // Retorna false si hay un error
-        }
+    public function saveImagePath($filePath, $size, $type) {
+        // Guardar la ruta de la imagen en la base de datos
+        $sql = "INSERT INTO imagenes_personalizadas (id_cliente, ruta_imagen, size, type, fecha_subida) VALUES (?, ?, ?, ?, NOW())";
+        $id_cliente = $_SESSION['idCliente'];
+        $datos = array($id_cliente, $filePath, $size, $type);
+        $data = $this->insertar($sql, $datos);
+        return $data > 0 ? $data : 0;
+        
     }
 
-    // Aquí podrías agregar otros métodos relacionados con las personalizaciones, como obtener imágenes, etc.
+    public function addToCart($filePath, $size, $type) {
+        // Definir precio y categoría según el tamaño y tipo de licor
+        $price = $this->calculatePrice($size, $type);
+        $producto = "Botella personalizada ($size, $type)";
+
+        $sql = "INSERT INTO carrito (id_cliente, producto, precio, cantidad, imagen) VALUES (?, ?, ?, 1, ?)";
+        $id_cliente = $_SESSION['user_id']; // Usar el ID del cliente actual desde la sesión
+        $datos = array($id_cliente, $producto, $price, $filePath);
+        $data = $this->insertar($sql, $datos);
+        if ($data > 0) {
+            $res = $data;
+        } else {
+            $res = 0;
+        }
+        return $res;
+    }
+
+    private function calculatePrice($size, $type) {
+        // Definir precios según el tamaño y tipo de licor
+        $basePrice = 10; // Precio base
+        switch ($size) {
+            case 'small':
+                $basePrice += 5;
+                break;
+            case 'medium':
+                $basePrice += 10;
+                break;
+            case 'large':
+                $basePrice += 15;
+                break;
+        }
+        switch ($type) {
+            case 'vodka':
+                $basePrice += 20;
+                break;
+            case 'whisky':
+                $basePrice += 30;
+                break;
+            case 'rum':
+                $basePrice += 25;
+                break;
+        }
+        return $basePrice;
+    }
+
+    private function getCategory($type) {
+        // Definir categorías según el tipo de licor
+        switch ($type) {
+            case 'vodka':
+                return 'Vodka';
+            case 'whisky':
+                return 'Whisky';
+            case 'rum':
+                return 'Ron';
+        }
+    }
 }
 ?>
