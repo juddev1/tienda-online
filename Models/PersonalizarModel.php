@@ -72,5 +72,12 @@ class PersonalizarModel extends Query {
                 return 'Ron';
         }
     }
+
+    public function getPersonalizadosUsuario($idCliente) {
+        $sql = "SELECT * FROM imagenes_personalizadas WHERE id_cliente = ?";
+        $datos = array($idCliente);
+        return $this->selectAll($sql, $datos);
+    }
+    
 }
 ?>

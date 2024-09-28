@@ -26,44 +26,35 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 });
 
-function agregarCarrito(idProducto, cantidad, filePath, size, type, esPersonalizado = false) {
+function agregarCarrito(idProducto, cantidad, esPersonalizado = false, imagen = '', size = '', type = '') {
     if (localStorage.getItem("listaCarrito") == null) {
         listaCarrito = [];
     } else {
-        let listaExiste = JSON.parse(localStorage.getItem("listaCarrito"));
-        listaCarrito = listaExiste;
-    }
-
-    // Generar un ID único para productos personalizados
-    if (esPersonalizado) {
-        idProducto = idProducto + '_' + Date.now(); // Por ejemplo: 'custom_1632767890'
-    }
-
-    // Verificar si el producto ya existe en el carrito (solo para productos no personalizados)
-    if (!esPersonalizado) {
-        for (let i = 0; i < listaCarrito.length; i++) {
-            if (listaCarrito[i]["idProducto"] == idProducto && !listaCarrito[i]["personalizado"]) {
-                alertaPerzanalizada("EL PRODUCTO YA ESTÁ AGREGADO", "warning");
-                return;
-            }
-        }
+        listaCarrito = JSON.parse(localStorage.getItem("listaCarrito"));
     }
 
     // Agregar el producto al carrito
-    listaCarrito.push({
+    const producto = {
         idProducto: idProducto,
         cantidad: cantidad,
-        imagen: filePath,
-        size: size,
-        type: type,
-        personalizado: esPersonalizado // Aquí indicamos si es personalizado o no
-    });
+        personalizado: esPersonalizado
+    };
+
+    if (esPersonalizado) {
+        producto.imagen = imagen;
+        producto.size = size;
+        producto.type = type;
+    }
+
+    listaCarrito.push(producto);
+
+    console.log('Producto agregado al carrito:', producto);
+    console.log('Contenido de listaCarrito:', listaCarrito);
 
     localStorage.setItem("listaCarrito", JSON.stringify(listaCarrito));
     alertaPerzanalizada("PRODUCTO AGREGADO AL CARRITO", "success");
     cantidadCarrito();
 }
-
 
 function cantidadCarrito() {
     let listas = JSON.parse(localStorage.getItem("listaCarrito"));
@@ -78,25 +69,28 @@ function getListaCarrito() {
     const url = base_url + 'principal/listaProductos';
     const http = new XMLHttpRequest();
     http.open('POST', url, true);
-    http.setRequestHeader('Content-Type', 'application/json'); // Asegúrate de establecer el tipo de contenido
+    http.setRequestHeader('Content-Type', 'application/json');
     http.send(JSON.stringify(listaCarrito));
     http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             const res = JSON.parse(this.responseText);
             let html = '';
             res.productos.forEach(producto => {
+                // Usamos producto.idProducto para consistencia
+                const idProducto = producto.idProducto;
+
                 if (producto.personalizado) {
                     // Renderizar producto personalizado
                     html += `<tr>
-                        <td><img class="img-thumbnail" src="${base_url + producto.imagen}" alt="" width="100"></td>
-                        <td>Producto personalizado (${producto.size}, ${producto.type})</td>
-                        <td><span class="badge bg-warning">${res.moneda + ' ' + producto.precio}</span></td>
-                        <td width="100">
-                        <input type="number" class="form-control agregarCantidad" id="${producto.idProducto}" value="${producto.cantidad}">
-                        </td>
-                        <td>${producto.subTotal}</td>
-                        <td><button class="btn btn-danger btnDeletecart" type="button" prod="${producto.idProducto}"><i class="fas fa-times-circle"></i></button></td>
-                    </tr>`;
+        <td><img class="img-thumbnail" src="${base_url + producto.imagen}" alt="" width="100"></td>
+        <td>Producto personalizado (${producto.size}, ${producto.type})</td>
+        <td><span class="badge bg-warning">${res.moneda + ' ' + producto.precio}</span></td>
+        <td width="100">
+            <input type="number" class="form-control agregarCantidad" id="${idProducto}" value="${producto.cantidad}">
+        </td>
+        <td>${producto.subTotal}</td>
+        <td><button class="btn btn-danger btnDeletecart" type="button" prod="${idProducto}"><i class="fas fa-times-circle"></i></button></td>
+    </tr>`;
                 } else {
                     // Renderizar producto normal
                     html += `<tr>
@@ -104,20 +98,28 @@ function getListaCarrito() {
                         <td>${producto.nombre}</td>
                         <td><span class="badge bg-warning">${res.moneda + ' ' + producto.precio}</span></td>
                         <td width="100">
-                        <input type="number" class="form-control agregarCantidad" id="${producto.idProducto}" value="${producto.cantidad}">
+                            <input type="number" class="form-control agregarCantidad" id="${idProducto}" value="${producto.cantidad}">
                         </td>
                         <td>${producto.subTotal}</td>
-                        <td><button class="btn btn-danger btnDeletecart" type="button" prod="${producto.idProducto}"><i class="fas fa-times-circle"></i></button></td>
+                        <td><button class="btn btn-danger btnDeletecart" type="button" prod="${idProducto}"><i class="fas fa-times-circle"></i></button></td>
                     </tr>`;
                 }
             });
             tableListaCarrito.innerHTML = html;
+
+
+    console.log('Productos recibidos del servidor:', res.productos);
             document.querySelector('#totalGeneral').textContent = res.total;
             btnEliminarCarrito();
             cambiarCantidad();
+
+
+        } else if (this.readyState == 4) {
+            alert('Error al obtener la lista de productos del carrito.');
         }
     }
 }
+
 
 
 function btnEliminarCarrito() {

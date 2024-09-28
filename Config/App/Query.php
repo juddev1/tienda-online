@@ -5,6 +5,7 @@ class Query extends Conexion{
         $this->pdo = new Conexion();
         $this->con = $this->pdo->conect();
     }
+    /*
     public function select(string $sql)
     {
         $this->sql = $sql;
@@ -13,6 +14,28 @@ class Query extends Conexion{
         $data = $resul->fetch(PDO::FETCH_ASSOC);
         return $data;
     }
+*/
+    public function select(string $sql, array $datos = [])
+    {
+        $this->sql = $sql;
+        $this->datos = $datos;
+        $resul = $this->con->prepare($this->sql);
+        $resul->execute($this->datos);
+        $data = $resul->fetch(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+
+    public function selectAll(string $sql, array $datos = [])
+{
+    $this->sql = $sql;
+    $this->datos = $datos;
+    $resul = $this->con->prepare($this->sql);
+    $resul->execute($this->datos);
+    $data = $resul->fetchAll(PDO::FETCH_ASSOC);
+    return $data;
+}
+/*
     public function selectAll(string $sql)
     {
         $this->sql = $sql;
@@ -20,7 +43,7 @@ class Query extends Conexion{
         $resul->execute();
         $data = $resul->fetchAll(PDO::FETCH_ASSOC);
         return $data;
-    }
+    }*/
     public function save(string $sql, array $datos)
     {
         $this->sql = $sql;

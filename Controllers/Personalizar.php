@@ -7,7 +7,14 @@ class Personalizar extends Controller {
     }
 
     public function index() {
+        if (!isset($_SESSION['idCliente'])) {
+            header('Location: ' . BASE_URL . 'clientes/login');
+            exit;
+        }
+        $idCliente = $_SESSION['idCliente'];
+        $personalizados = $this->model->getPersonalizadosUsuario($idCliente);
         require_once 'Views/personaliz/personalizar.php';
+       
     }
 
     public function saveImage() {
