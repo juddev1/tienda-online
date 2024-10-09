@@ -49,5 +49,39 @@ class Personalizar extends Controller {
             echo "Error: Datos incompletos.";
         }
     }
+
+    public function recibirPersonalizacion()
+{
+    // Verifica que la solicitud sea vía POST
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Obtiene los datos enviados desde el cliente
+        $datos = file_get_contents('php://input');
+        $json = json_decode($datos, true);
+
+        // Extrae los datos
+        $imagen = $json['imagen'];
+        $size = $json['size'];
+        $type = $json['type'];
+        $cantidad = $json['cantidad'];
+        $idCliente = isset($_SESSION['id_cliente']) ? $_SESSION['id_cliente'] : null;
+
+        // Guarda la información en la base de datos
+        $resultado = $this->model->insertarPersonalizacion($idCliente, $imagen, $size, $type, $cantidad);
+
+        if ($resultado) {
+            // Opcional: Enviar correo electrónico al equipo interno
+            $this->enviarNotificacionInterna($idCliente, $imagen, $size, $type, $cantidad);
+
+            // Responder al cliente
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error']);
+        }
+    } else {
+        // Respuesta en caso de que no sea una solicitud POST
+        echo json_encode(['status' => 'error', 'message' => 'Método no permitido']);
+    }
+}
+
 }
 ?>

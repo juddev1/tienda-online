@@ -77,6 +77,16 @@
             <span class="nav-link-text ms-1">Pedidos</span>
           </a>
         </li>
+
+        <li class="nav-item">
+          <a class="nav-link text-white <?php echo ($data['title'] == 'pedidop') ? 'active bg-gradient-primary' : ''; ?>" href="<?php echo BASE_URL . 'pedidop'; ?>">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">fact_check
+              </i>
+            </div>
+            <span class="nav-link-text ms-1">Pedidos Personalizados</span>
+          </a>
+        </li>
       </ul>
     </div>
   </aside>
