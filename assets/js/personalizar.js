@@ -9,34 +9,53 @@ const licorType = document.getElementById('licorType');
 
 // Cargar la imagen del envase predeterminado
 const envase = new Image();
+
 envase.src = base_url + 'assets/images/envase.png'; // Asegúrate de tener esta imagen en la carpeta correcta
 envase.onload = function() {
-    ctx.drawImage(envase, 0, 0, canvas.width, canvas.height);
+    const iw = envase.width;
+    const ih = envase.height;
+
+    // Ajustar el tamaño del canvas a la imagen de la botella
+    canvas.width = iw;
+    canvas.height = ih;
+
+    // Dibujar la imagen de la botella en el canvas
+    ctx.drawImage(envase, 0, 0, iw, ih);
 };
+ // Asegúrate de tener esta imagen en la carpeta correcta
 
 // Cargar la imagen subida por el usuario
-imageLoader.addEventListener('change', function(e) {
+document.getElementById('imageLoader').addEventListener('change', function(e) {
     const reader = new FileReader();
     reader.onload = function(event) {
         const userImage = new Image();
         userImage.onload = function() {
-            // Dibujar el envase primero
             ctx.drawImage(envase, 0, 0, canvas.width, canvas.height);
+                
+            
 
-            // Definir las coordenadas y el tamaño del área de la etiqueta (la botella)
-            const botellaCentroX = canvas.width / 2;  // Centro del canvas (y la botella)
-            const botellaAncho = 150;  // Asumimos que la botella tiene un ancho de 150px
-            const etiquetaAncho = botellaAncho * 0.4; // Redimensionar la imagen personalizada
-            const etiquetaAlto = etiquetaAncho * 1.2; // Mantener la proporción
+            const iw = userImage.width;
+            const ih = userImage.height;
 
-            // Centrar la imagen personalizada horizontalmente
-            const centroX = botellaCentroX - (etiquetaAncho / 2);
+            // Posición donde empezar a dibujar la imagen en la botella
+            const xOffset = 105; // Ajusta según la botella
+            const yOffset = 140; // Ajusta según la botella
 
-            // Ajustar la coordenada Y para bajar la imagen
-            const centroY = 200;  // Cambiar esta coordenada para que la imagen baje al medio
+            const a = 65.0;  // Ancho de la curva (ajustar según la botella)
+            const b = 11;    // Curvatura (ajustar para cambiar el efecto)
 
-            // Dibujar la imagen del usuario redimensionada y centrada en la botella
-            ctx.drawImage(userImage, centroX, centroY, etiquetaAncho, etiquetaAlto);
+            // Calcular el factor de escala de la imagen
+            const scaleFactor = iw / (4 * a);
+
+            // Dibujar rebanadas de la imagen una por una
+            for (let X = 0; X < iw; X += 1) {
+                // Aplicar la fórmula de la elipse para calcular el desplazamiento
+                const y = b / a * Math.sqrt(a * a - (X - a) * (X - a));
+
+                // Dibujar cada rebanada de la imagen del usuario distorsionada
+                ctx.drawImage(userImage, X * scaleFactor, 0, iw / 9, ih, 
+                              X + xOffset, y + yOffset, 1, 174); // Ajusta la altura de la imagen con "174"
+            }
         };
         userImage.src = event.target.result;
     };

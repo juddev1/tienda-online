@@ -52,6 +52,7 @@ class Admin extends Controller
         $data['procesos'] = $this->model->getTotales(2);
         $data['finalizados'] = $this->model->getTotales(3);
         $data['productos'] = $this->model->getProductos();
+        $data['pedidosPersonalizados'] = $this->model->getPedidosPersonalizados();
         $this->views->getView('admin/administracion', "index", $data);
     }
 

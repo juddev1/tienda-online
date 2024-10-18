@@ -21,6 +21,15 @@ class AdminModel extends Query{
         return $this->select($sql);
     }
 
+    public function getPedidosPersonalizados() {
+        $sql = "SELECT c.nombre AS nombre_cliente, c.correo AS correo_cliente, p.direccion, 
+                       ip.ruta_imagen, ip.fecha_subida
+                FROM imagenes_personalizadas ip
+                INNER JOIN pedidos p ON ip.id_cliente = p.id_cliente
+                INNER JOIN clientes c ON ip.id_cliente = c.id
+                WHERE p.estado = 'COMPLETED'";  // Puedes ajustar el filtro si es necesario
+        return $this->selectAll($sql);
+    }
     public function productosMinimos()
     {
         $sql = "SELECT * FROM productos WHERE cantidad < 15 AND estado = 1 ORDER BY cantidad DESC LIMIT 3";

@@ -2,135 +2,305 @@
 include_once 'Views/template/header-principal.php';
 ?>
 
-<div class="container my-5">
-    <h1 class="mb-4 text-center">Mis Productos Personalizados</h1>
-    <?php if (!empty($personalizados)) { ?>
-        <div class="row">
-            <?php foreach ($personalizados as $producto) { ?>
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
-                        <img src="<?php echo BASE_URL . $producto['ruta_imagen']; ?>" class="card-img-top" alt="Producto Personalizado">
-                        <div class="card-body">
-                            <h5 class="card-title">Producto Personalizado</h5>
-                            <p class="card-text"><strong>Tamaño:</strong> <?php echo ucfirst($producto['size']); ?></p>
-                            <p class="card-text"><strong>Tipo:</strong> <?php echo ucfirst($producto['type']); ?></p>
-                            <p class="card-text"><strong>Cantidad:</strong> <?php echo $producto['cantidad']; ?></p>
-                            <div class="alert alert-info mt-3" role="alert">
-                                <i class="fas fa-check-circle"></i> Su personalización ha sido enviada para cotización. Nos pondremos en contacto con usted pronto.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
-        </div>
-    <?php } else { ?>
-        <div class="alert alert-warning text-center" role="alert">
-            <i class="fas fa-exclamation-triangle"></i> No tienes productos personalizados. ¡Crea uno ahora!
-        </div>
-    <?php } ?>
-    <hr class="my-5">
-    <h2 class="mb-4 text-center">Crear Nuevo Producto Personalizado</h2>
-    <!-- Formulario para crear un nuevo producto personalizado -->
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <!-- Imagen del envase predeterminado -->
-            <canvas id="customCanvas" width="400" height="400" class="border mb-3 w-100"></canvas>
-            <!-- Input para que el usuario suba la imagen -->
-            <div class="mb-3">
-                <label for="imageLoader" class="form-label">Subir imagen para personalizar</label>
-                <input type="file" id="imageLoader" accept="image/*" class="form-control">
-            </div>
-        </div>
-        <div class="col-md-6 mb-4">
-            <!-- Selección de tamaño del envase -->
-            <div class="mb-3">
-                <label for="envaseSize" class="form-label">Tamaño del Envase</label>
-                <select id="envaseSize" class="form-select">
-                    <option value="small">Pequeño</option>
-                    <option value="medium">Mediano</option>
-                    <option value="large">Grande</option>
-                </select>
-            </div>
-            <!-- Selección de tipo de licor -->
-            <div class="mb-3">
-                <label for="licorType" class="form-label">Tipo de Licor</label>
-                <select id="licorType" class="form-select">
-                    <option value="vodka">Vodka</option>
-                    <option value="whisky">Whisky</option>
-                    <option value="rum">Ron</option>
-                </select>
-            </div>
-            <!-- Selección de cantidad -->
-            <div class="mb-3">
-                <label for="productQuantity" class="form-label">Cantidad</label>
-                <input type="number" id="productQuantity" class="form-control" min="1" value="1">
-            </div>
-            <!-- Botones -->
-            <div class="d-flex">
-                <button id="saveProductBtn" class="btn btn-success me-2"><i class="fas fa-save"></i> Guardar Producto</button>
-                <button id="cancelBtn" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar Personalización</button>
-            </div>
-        </div>
+<style>
+    /* Estilos generales */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* Estilo de la descripción inicial */
+    #header-description {
+        text-align: center;
+        background-color: #f8f9fa;
+        padding: 20px;
+    }
+
+    #header-description img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    #header-description h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+
+    #header-description p {
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    /* Sección de categorías */
+    #product-categories {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 20px 0;
+        padding: 20px;
+    }
+
+    .category {
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        width: 200px;
+    }
+
+    .category img {
+        width: 100%;
+        height: auto;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+
+    .category button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .category button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Sección de productos personalizados */
+    #predefined-products {
+        text-align: center;
+        background-color: #f1f1f1;
+        padding: 20px;
+    }
+
+    #predefined-products .product {
+        display: inline-block;
+        width: 200px;
+        margin: 10px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    #predefined-products .product img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    #predefined-products button {
+        background-color: #28a745;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 10px;
+    }
+
+    #predefined-products button:hover {
+        background-color: #218838;
+    }
+
+    /* Estilos para el canvas y la sección de personalización */
+    #canvas-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #canvas {
+        border: 1px solid black;
+    }
+</style>
+
+<!-- Descripción inicial -->
+<section id="header-description">
+    <h1>Personaliza tus Botellas</h1>
+    <p>Explora nuestras botellas y elige entre diferentes tamaños y plantillas de diseño. Personaliza o elige uno ya diseñado para tu ocasión especial.</p>
+    <img src="https://via.placeholder.com/1000x300" alt="Banner de personalización">
+</section>
+
+<!-- Sección de categorías -->
+<section id="product-categories">
+    <div class="category">
+        <h3>Botellas Pequeñas</h3>
+        <img src="https://via.placeholder.com/150x300" alt="Botella pequeña">
+        <button data-size="small">Personalizar</button>
     </div>
-</div>
+    <div class="category">
+        <h3>Botellas Medianas</h3>
+        <img src="https://via.placeholder.com/150x300" alt="Botella mediana">
+        <button data-size="medium">Personalizar</button>
+    </div>
+    <div class="category">
+        <h3>Botellas Grandes</h3>
+        <img src="https://via.placeholder.com/150x300" alt="Botella grande">
+        <button data-size="large">Personalizar</button>
+    </div>
+</section>
+
+<!-- Productos personalizados del usuario -->
+<section id="predefined-products">
+    <h2>Mis Productos Personalizados</h2>
+    <!-- Productos personalizados cargados dinámicamente -->
+</section>
+
+<!-- Formulario para crear un nuevo producto personalizado -->
+<section id="personalization-form">
+    <h2>Crear Nuevo Producto Personalizado</h2>
+    <div id="canvas-container">
+        <!-- Canvas para mostrar la botella y la imagen personalizada -->
+        <canvas id="canvas" width="300" height="600"></canvas>
+    </div>
+    <div class="form-group">
+        <label for="uploadImage">Sube tu imagen:</label>
+        <input type="file" id="uploadImage" accept="image/*">
+    </div>
+    <div class="form-group">
+        <label for="envaseSize">Tamaño del Envase</label>
+        <select id="envaseSize">
+            <option value="small">Pequeño</option>
+            <option value="medium" selected>Mediano</option>
+            <option value="large">Grande</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="licorType">Tipo de Licor</label>
+        <select id="licorType">
+            <option value="vodka">Vodka</option>
+            <option value="whisky">Whisky</option>
+            <option value="rum">Ron</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="productQuantity">Cantidad</label>
+        <input type="number" id="productQuantity" min="1" value="1">
+    </div>
+    <button id="saveProductBtn">Solicitar Personalización</button>
+    <button id="cancelBtn">Cancelar Personalización</button>
+</section>
 
 <?php include_once 'Views/template/footer-principal.php'; ?>
 
-<!-- Incluir el archivo JavaScript -->
-<script src="<?php echo BASE_URL; ?>assets/js/personalizar.js"></script>
 <script>
-    // Código JavaScript para manejar la lógica de guardar el producto personalizado
+    // Variables globales
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const imageLoader = document.getElementById('uploadImage');
+    let selectedSize = 'medium'; // Tamaño predeterminado
 
+    // Función para cargar la imagen de la botella
+    function loadBottleImage(size) {
+        const envase = new Image();
+        envase.onload = function() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(envase, 0, 0, canvas.width, canvas.height);
+        };
+        envase.src = '<?php echo BASE_URL; ?>assets/images/envase_' + size + '.png';
+        console.log('Cargando imagen del envase:', envase.src); // Verificar la URL de la imagen
+    }
+
+    // Cargar la imagen predeterminada al cargar la página
+    window.onload = function() {
+        loadBottleImage(selectedSize);
+    };
+
+    // Manejar los botones de las categorías
+    document.querySelectorAll('.category button').forEach(button => {
+        button.addEventListener('click', function() {
+            selectedSize = this.getAttribute('data-size');
+            document.getElementById('envaseSize').value = selectedSize;
+            document.getElementById('personalization-form').scrollIntoView({ behavior: 'smooth' });
+            loadBottleImage(selectedSize);
+        });
+    });
+
+    // Cargar la imagen subida por el usuario
+    document.getElementById('uploadImage').addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    const iw = img.width;
+                    const ih = img.height;
+
+                    // Posición donde empezar a dibujar la imagen en la botella
+                    const xOffset = 105; // Ajusta según la botella
+                    const yOffset = 140; // Ajusta según la botella
+
+                    const a = 65.0;  // Ancho de la curva (ajustar según la botella)
+                    const b = 11;    // Curvatura (ajustar para cambiar el efecto)
+
+                    // Calcular el factor de escala de la imagen
+                    const scaleFactor = iw / (4 * a);
+
+                    // Dibujar rebanadas de la imagen una por una
+                    for (let X = 0; X < iw; X += 1) {
+                        // Aplicar la fórmula de la elipse para calcular el desplazamiento
+                        const y = b / a * Math.sqrt(a * a - (X - a) * (X - a));
+
+                        // Dibujar cada rebanada de la imagen del usuario distorsionada
+                        ctx.drawImage(img, X * scaleFactor, 0, iw / 9, ih, 
+                                      X + xOffset, y + yOffset, 1, 174); // Ajusta la altura de la imagen con "174"
+                    }
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        });
+
+    // Manejar el botón de solicitar personalización
     document.getElementById('saveProductBtn').addEventListener('click', function() {
-        // Recopilar los datos ingresados por el usuario
-        const imagen = /* código para obtener la imagen del canvas o del input */;
+        const dataURL = canvas.toDataURL('image/png');
         const size = document.getElementById('envaseSize').value;
         const type = document.getElementById('licorType').value;
         const cantidad = parseInt(document.getElementById('productQuantity').value, 10);
 
-        // Validar que la cantidad sea válida
         if (cantidad <= 0) {
             alertaPerzonalizada('Por favor, ingrese una cantidad válida.', 'warning');
             return;
         }
 
-        // Crear un objeto con los datos de personalización
-        const datosPersonalizacion = {
-            imagen: imagen,
-            size: size,
-            type: type,
-            cantidad: cantidad
-        };
-
-        // Enviar los datos al servidor
         fetch('<?php echo BASE_URL; ?>personalizar/recibirPersonalizacion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(datosPersonalizacion)
+            body: JSON.stringify({
+                imagen: dataURL,
+                size: size,
+                type: type,
+                cantidad: cantidad
+            })
         })
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                // Muestra un mensaje de confirmación al usuario
-                alertaPerzonalizada('¡Gracias! Su personalización ha sido enviada para cotización.', 'success');
-                // Opcional: Recargar la página o redirigir al usuario
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000);
+                alertaPerzonalizada('Su personalización ha sido enviada.', 'success');
+                setTimeout(() => window.location.reload(), 2000);
             } else {
-                alertaPerzonalizada('Ocurrió un error al enviar su personalización. Por favor, inténtelo de nuevo.', 'error');
+                alertaPerzonalizada('Error al enviar la personalización.', 'error');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alertaPerzonalizada('Ocurrió un error al enviar su personalización. Por favor, inténtelo de nuevo.', 'error');
+            alertaPerzonalizada('Error al enviar la personalización.', 'error');
         });
     });
 
+    // Cancelar personalización
     document.getElementById('cancelBtn').addEventListener('click', function() {
-        // Reiniciar el formulario o redirigir al usuario
         window.location.reload();
     });
+
+    // Mostrar alertas personalizadas
+    function alertaPerzonalizada(mensaje, tipo) {
+        alert(mensaje);
+    }
 </script>
