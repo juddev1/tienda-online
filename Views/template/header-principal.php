@@ -56,7 +56,6 @@
    <!-- banner bg main start -->
    <div class="banner_bg_main">
       <!-- header top section start -->
-      
       <!-- header top section start -->
       <!-- logo section start -->
       <div class="logo_section">
@@ -106,12 +105,16 @@
                      <ul>
                      <li><a href="<?php echo BASE_URL; ?>index.php?url=personalizar/index">
                <i class="fa fa-paint-brush" aria-hidden="true"></i>
-               <span class="padding_10">Personalizar</span></a>
+               <span class="padding_10">Regalos</span></a>
          </li>
                         <li><a href="#" id="verCarrito">
                               <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                               <span class="padding_10" id="btnCantidadCarrito">Cart</span></a>
                         </li>
+                        <li><a href="#" data-toggle="modal" data-target="#modalRetiroTienda">
+               <i class="fa fa-store" aria-hidden="true"></i>
+               <span class="padding_10">Retiro en Tienda</span></a>
+         </li>
                         <?php if (empty($_SESSION['nombreCliente'])) {
                            echo '<li><a href="#" data-toggle="modal" data-target="#modalLogin">
                                  <i class="fa fa-user" aria-hidden="true"></i>
@@ -132,3 +135,61 @@
          </div>
       </div>
       <!-- header section end -->
+
+      <!-- Modal para Retiro en Tienda -->
+      <div class="modal fade" id="modalRetiroTienda" tabindex="-1" role="dialog" aria-labelledby="modalRetiroTiendaLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="modalRetiroTiendaLabel">Selecciona una Sucursal para Retiro</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body">
+                  <form id="formRetiroTienda">
+                     <div class="form-group">
+                        <label for="sucursal">Sucursales Disponibles</label>
+                        <select class="form-control" id="sucursal" name="sucursal">
+                           <option value="sucursal1">Santiago de Surco 1 - Pje. Pallasca, Santiago de Surco 15049</option>
+                           <option value="sucursal2">Santiago de Surco 2 - Avenida, Jr. El Sol 291, Santiago de Surco 15054</option>
+                           <option value="sucursal3">San Borja 3 - Av. San Luis 2551, San Borja 15037</option>
+                        </select>
+                     </div>
+                     <button type="submit" class="btn btn-primary">Confirmar</button>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+      <script>
+      document.getElementById('formRetiroTienda').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const sucursal = document.getElementById('sucursal').value;
+      alert('Has seleccionado la ' + sucursal);
+
+      // Guardar la selección de la sucursal en la sesión del usuario
+      fetch('<?php echo BASE_URL; ?>index.php?url=clientes/guardarSucursal', {
+         method: 'POST',
+         credentials: 'include',
+         headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+         },
+         body: 'sucursal=' + encodeURIComponent(sucursal)
+      })
+      .then(response => response.json())
+      .then(data => {
+         if (data.status === 'success') {
+            alert('Sucursal guardada correctamente.');
+         } else {
+            alert('Error al guardar la sucursal.');
+         }
+      })
+      .catch(error => {
+         console.error('Error:', error);
+         alert('Error al guardar la sucursal.');
+      });
+
+      $('#modalRetiroTienda').modal('hide');
+   });
+</script>

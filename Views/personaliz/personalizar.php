@@ -3,304 +3,629 @@ include_once 'Views/template/header-principal.php';
 ?>
 
 <style>
-    /* Estilos generales */
+    /* Estilos CSS combinados y actualizados */
     body {
         font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        color: #333;
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
 
-    /* Estilo de la descripción inicial */
-    #header-description {
-        text-align: center;
-        background-color: #f8f9fa;
+    .container {
+        max-width: 800px;
+        margin: 20px auto; /* Ajustado para dar espacio arriba */
         padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    #header-description img {
+    .title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 2em;
+    }
+
+    /* Estilos para la descripción inicial */
+    #header-description {
+        display: flex;
+        align-items: center;
+        background-color: #f9f5fc;
+        padding: 2rem;
+        gap: 2rem;
+    }
+
+    .text-content {
+        flex: 1;
+    }
+
+    .image-content {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .image-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    #header-description h2 {
+        color: #4a145b;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    #header-description p {
+        color: #333;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    #header-description button {
+        background-color: orange;
+        color: #fff;
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    #header-description button:hover {
+        background-color: orangered;
+    }
+
+    /* Estilos para las pestañas y tarjetas */
+    .tabs {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+
+    .tab-button {
+        padding: 10px;
+        border: none;
+        background-color: #ddd;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .tab-button.active {
+        background-color: #bbb;
+    }
+
+    .card {
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+    }
+
+    .design-group, .upload-group {
+        margin-bottom: 20px;
+    }
+
+    .design-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .design-option {
+        border: 1px solid #ddd;
+        padding: 10px;
+        cursor: pointer;
+        text-align: center;
+        flex: 1 1 calc(33% - 20px);
+        box-sizing: border-box;
+    }
+
+    .design-option.selected {
+        border: 2px solid #007BFF;
+    }
+
+    .design-option img {
         max-width: 100%;
         height: auto;
     }
 
-    #header-description h1 {
-        font-size: 2.5rem;
-        margin-bottom: 10px;
-    }
-
-    #header-description p {
-        font-size: 1.2rem;
-        color: #666;
-    }
-
-    /* Sección de categorías */
-    #product-categories {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin: 20px 0;
-        padding: 20px;
-    }
-
-    .category {
+    .upload-label {
+        display: block;
+        padding: 40px;
+        border: 2px dashed #aaa;
         text-align: center;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        padding: 20px;
-        width: 200px;
-    }
-
-    .category img {
-        width: 100%;
-        height: auto;
-        border-bottom: 1px solid #ccc;
-        padding-bottom: 15px;
-        margin-bottom: 15px;
-    }
-
-    .category button {
-        background-color: #007bff;
-        color: white;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
+        background-color: #fafafa;
         cursor: pointer;
     }
 
-    .category button:hover {
+    .bottle-preview {
+        background-color: #e0e0e0;
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
         background-color: #0056b3;
     }
 
-    /* Sección de productos personalizados */
-    #predefined-products {
-        text-align: center;
-        background-color: #f1f1f1;
-        padding: 20px;
+    .hidden {
+        display: none;
     }
 
-    #predefined-products .product {
-        display: inline-block;
-        width: 200px;
-        margin: 10px;
-        text-align: center;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        padding: 10px;
+    /* Estilos para el carrusel */
+    .carousel-container {
+        margin-top: 40px;
     }
 
-    #predefined-products .product img {
-        width: 100%;
-        height: auto;
-        margin-bottom: 10px;
+    .carousel {
+        display: flex;
+        overflow: hidden;
+        position: relative;
     }
 
-    #predefined-products button {
-        background-color: #28a745;
-        color: white;
-        padding: 10px;
+    .carousel-inner {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel-item {
+        min-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .carousel-control {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0,0,0,0.5);
         border: none;
-        border-radius: 5px;
+        color: #fff;
+        font-size: 2em;
+        padding: 0 10px;
         cursor: pointer;
-        margin-bottom: 10px;
     }
 
-    #predefined-products button:hover {
-        background-color: #218838;
+    .carousel-control.prev {
+        left: 0;
     }
 
-    /* Estilos para el canvas y la sección de personalización */
-    #canvas-container {
+    .carousel-control.next {
+        right: 0;
+    }
+
+    .predefined-product {
         text-align: center;
-        margin-bottom: 20px;
+        padding: 10px;
     }
 
-    #canvas {
-        border: 1px solid black;
+    .predefined-product img {
+        max-width: 100%;
+        height: auto;
     }
+
 </style>
 
 <!-- Descripción inicial -->
 <section id="header-description">
-    <h1>Personaliza tus Botellas</h1>
-    <p>Explora nuestras botellas y elige entre diferentes tamaños y plantillas de diseño. Personaliza o elige uno ya diseñado para tu ocasión especial.</p>
-    <img src="https://via.placeholder.com/1000x300" alt="Banner de personalización">
-</section>
-
-<!-- Sección de categorías -->
-<section id="product-categories">
-    <div class="category">
-        <h3>Botellas Pequeñas</h3>
-        <img src="https://via.placeholder.com/150x300" alt="Botella pequeña">
-        <button data-size="small">Personalizar</button>
+    <div class="text-content">
+        <h2>Regalos Personalizados</h2>
+        <p>Bienvenidos a Japi Beer, el lugar de regalos personalizados donde la tradición de un licor se une con la innovación del diseño personalizado.</p>
+        <p>Nuestra web es el destino predilecto para aquellos que buscan regalos únicos y memorables, ofreciendo una amplia gama de opciones para personalizar envases de acuerdo a un vodka, whisky y ron deseados, ideales para cualquier ocasión.</p>
+        <p>Descubre el arte de regalar con un toque personal en Japi Beer.</p>
+        <button onclick="scrollToCustomize()">¡Quiero empezar con el diseño de mi Pisco!</button>
     </div>
-    <div class="category">
-        <h3>Botellas Medianas</h3>
-        <img src="https://via.placeholder.com/150x300" alt="Botella mediana">
-        <button data-size="medium">Personalizar</button>
-    </div>
-    <div class="category">
-        <h3>Botellas Grandes</h3>
-        <img src="https://via.placeholder.com/150x300" alt="Botella grande">
-        <button data-size="large">Personalizar</button>
+    <div class="image-content">
+        <img src="<?php echo BASE_URL; ?>assets/images/fondoheader.jpg" alt="Botellas de Pisco Personalizadas">
     </div>
 </section>
 
-<!-- Productos personalizados del usuario -->
-<section id="predefined-products">
-    <h2>Mis Productos Personalizados</h2>
-    <!-- Productos personalizados cargados dinámicamente -->
-</section>
+<div class="container">
+    <h1 class="title">Personaliza tus Botellas</h1>
+    <div class="tabs">
+        <!-- Tabs for switching between customization and predefined products -->
+        <button class="tab-button active" data-tab="customize">Personalizar</button>
+        <button class="tab-button" data-tab="predefined">Productos Predefinidos</button>
+    </div>
 
-<!-- Formulario para crear un nuevo producto personalizado -->
-<section id="personalization-form">
-    <h2>Crear Nuevo Producto Personalizado</h2>
-    <div id="canvas-container">
-        <!-- Canvas para mostrar la botella y la imagen personalizada -->
-        <canvas id="canvas" width="300" height="600"></canvas>
+    <!-- Content for the customization tab -->
+    <div class="tab-content" id="customize">
+        <div class="card">
+            <h2>Crear Nuevo Producto Personalizado</h2>
+
+            <!-- Form group for selecting liquor type -->
+            <div class="form-group">
+                <label for="licorType">Tipo de Licor</label>
+                <select id="licorType">
+                    <option value="vodka" selected>Vodka</option>
+                    <option value="whisky">Whisky</option>
+                    <option value="rum">Ron</option>
+                </select>
+            </div>
+
+            <!-- Section for selecting a base design -->
+            <div class="design-group">
+                <p>Selecciona un Diseño Base</p>
+                <div class="design-options" id="baseDesigns">
+                    <!-- Designs will be generated here dynamically -->
+                </div>
+            </div>
+
+            <!-- Section for uploading a custom image -->
+            <div class="upload-group">
+                <label for="uploadImage" class="upload-label">
+                    Haz clic para subir o arrastra y suelta
+                </label>
+                <input id="uploadImage" type="file" accept="image/*">
+            </div>
+
+            <!-- Preview section for the customized bottle -->
+            <div class="preview">
+                <canvas id="canvas" class="bottle-preview">
+                    Tu navegador no soporta el elemento canvas.
+                </canvas>
+            </div>
+
+            <!-- Form group for selecting quantity -->
+            <div class="form-group">
+                <label for="productQuantity">Cantidad</label>
+                <input type="number" id="productQuantity" min="1" value="1">
+            </div>
+
+            <!-- Button to request customization -->
+            <button id="saveProductBtn">Solicitar Personalización</button>
+            <button id="cancelBtn">Cancelar Personalización</button>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="uploadImage">Sube tu imagen:</label>
-        <input type="file" id="uploadImage" accept="image/*">
+
+    <!-- Content for the predefined products tab -->
+    <div class="tab-content hidden" id="predefined">
+        <div class="card">
+            <h2>Productos Predefinidos</h2>
+            <div class="predefined-products" id="predefinedDesigns">
+                <!-- Predefined products will be generated here -->
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="envaseSize">Tamaño del Envase</label>
-        <select id="envaseSize">
-            <option value="small">Pequeño</option>
-            <option value="medium" selected>Mediano</option>
-            <option value="large">Grande</option>
-        </select>
+
+    <!-- Carousel of predefined products -->
+    <div class="carousel-container">
+        <h2>Productos Destacados</h2>
+        <div class="carousel">
+            <div class="carousel-inner" id="carouselInner">
+                <!-- Carousel items will be injected here -->
+            </div>
+            <button class="carousel-control prev" id="carouselPrev">‹</button>
+            <button class="carousel-control next" id="carouselNext">›</button>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="licorType">Tipo de Licor</label>
-        <select id="licorType">
-            <option value="vodka">Vodka</option>
-            <option value="whisky">Whisky</option>
-            <option value="rum">Ron</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="productQuantity">Cantidad</label>
-        <input type="number" id="productQuantity" min="1" value="1">
-    </div>
-    <button id="saveProductBtn">Solicitar Personalización</button>
-    <button id="cancelBtn">Cancelar Personalización</button>
-</section>
+</div>
 
 <?php include_once 'Views/template/footer-principal.php'; ?>
 
 <script>
-    // Variables globales
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    const imageLoader = document.getElementById('uploadImage');
-    let selectedSize = 'medium'; // Tamaño predeterminado
+    document.addEventListener("DOMContentLoaded", () => {
+        const tabs = document.querySelectorAll(".tab-button");
+        const tabContents = document.querySelectorAll(".tab-content");
+        const fileUpload = document.getElementById("uploadImage");
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        const predefinedDesigns = document.getElementById("predefinedDesigns");
+        const baseDesigns = document.getElementById("baseDesigns");
+        const carouselInner = document.getElementById("carouselInner");
+        const carouselPrev = document.getElementById("carouselPrev");
+        const carouselNext = document.getElementById("carouselNext");
+        const licorType = document.getElementById('licorType');
+        const productQuantity = document.getElementById('productQuantity');
+        const saveProductBtn = document.getElementById('saveProductBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        let selectedDesign = null; // Diseño seleccionado
+        let carouselIndex = 0;
 
-    // Función para cargar la imagen de la botella
-    function loadBottleImage(size) {
-        const envase = new Image();
-        envase.onload = function() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(envase, 0, 0, canvas.width, canvas.height);
+        // Objeto con dimensiones y offsets según el diseño
+        const bottleDimensions = {
+            'classic_small': {
+                width: 400, // Ancho de la imagen del envase con dos botellas
+                height: 300,
+                xOffsets: [50, 250], // Posiciones x de las dos botellas
+                yOffset: 70,
+                a: 50, // Parámetros para la distorsión elíptica
+                b: 15
+            },
+            'classic_medium': {
+                width: 500,
+                height: 400,
+                xOffsets: [75, 325],
+                yOffset: 90,
+                a: 65,
+                b: 20
+            },
+            'classic_large': {
+                width: 600,
+                height: 500,
+                xOffsets: [100, 400],
+                yOffset: 110,
+                a: 80,
+                b: 25
+            },
         };
-        envase.src = '<?php echo BASE_URL; ?>assets/images/envase_' + size + '.png';
-        console.log('Cargando imagen del envase:', envase.src); // Verificar la URL de la imagen
-    }
 
-    // Cargar la imagen predeterminada al cargar la página
-    window.onload = function() {
-        loadBottleImage(selectedSize);
-    };
+        // Array de diseños
+        const designs = [
+            {
+                id: 'classic_small',
+                name: "Diseño Clásico Pequeño",
+                image: '<?php echo BASE_URL; ?>assets/images/envase_small.png',
+                style: "classic"
+            },
+            {
+                id: 'classic_medium',
+                name: "Diseño Clásico Mediano",
+                image: '<?php echo BASE_URL; ?>assets/images/envase_medium.png',
+                style: "classic"
+            },
+            {
+                id: 'classic_large',
+                name: "Diseño Clásico Grande",
+                image: '<?php echo BASE_URL; ?>assets/images/envase_large.png',
+                style: "classic"
+            },
+        ];
 
-    // Manejar los botones de las categorías
-    document.querySelectorAll('.category button').forEach(button => {
-        button.addEventListener('click', function() {
-            selectedSize = this.getAttribute('data-size');
-            document.getElementById('envaseSize').value = selectedSize;
-            document.getElementById('personalization-form').scrollIntoView({ behavior: 'smooth' });
-            loadBottleImage(selectedSize);
-        });
-    });
-
-    // Cargar la imagen subida por el usuario
-    document.getElementById('uploadImage').addEventListener('change', function(e) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const img = new Image();
-                img.onload = function() {
-                    const iw = img.width;
-                    const ih = img.height;
-
-                    // Posición donde empezar a dibujar la imagen en la botella
-                    const xOffset = 105; // Ajusta según la botella
-                    const yOffset = 140; // Ajusta según la botella
-
-                    const a = 65.0;  // Ancho de la curva (ajustar según la botella)
-                    const b = 11;    // Curvatura (ajustar para cambiar el efecto)
-
-                    // Calcular el factor de escala de la imagen
-                    const scaleFactor = iw / (4 * a);
-
-                    // Dibujar rebanadas de la imagen una por una
-                    for (let X = 0; X < iw; X += 1) {
-                        // Aplicar la fórmula de la elipse para calcular el desplazamiento
-                        const y = b / a * Math.sqrt(a * a - (X - a) * (X - a));
-
-                        // Dibujar cada rebanada de la imagen del usuario distorsionada
-                        ctx.drawImage(img, X * scaleFactor, 0, iw / 9, ih, 
-                                      X + xOffset, y + yOffset, 1, 174); // Ajusta la altura de la imagen con "174"
-                    }
-                };
-                img.src = event.target.result;
-            };
-            reader.readAsDataURL(e.target.files[0]);
-        });
-
-    // Manejar el botón de solicitar personalización
-    document.getElementById('saveProductBtn').addEventListener('click', function() {
-        const dataURL = canvas.toDataURL('image/png');
-        const size = document.getElementById('envaseSize').value;
-        const type = document.getElementById('licorType').value;
-        const cantidad = parseInt(document.getElementById('productQuantity').value, 10);
-
-        if (cantidad <= 0) {
-            alertaPerzonalizada('Por favor, ingrese una cantidad válida.', 'warning');
-            return;
+        // Función para cargar los diseños base
+        function loadBaseDesigns() {
+            baseDesigns.innerHTML = ''; // Limpiar diseños existentes
+            designs.forEach(design => {
+                // Crear un nuevo elemento div para cada diseño
+                const designDiv = document.createElement("div");
+                designDiv.classList.add("design-option");
+                if (selectedDesign && selectedDesign.id === design.id) {
+                    designDiv.classList.add("selected");
+                }
+                designDiv.innerHTML = `<img src="${design.image}" alt="${design.name}"><p>${design.name}</p>`;
+                designDiv.addEventListener('click', () => {
+                    selectDesign(design);
+                    loadBaseDesigns(); // Recargar diseños para actualizar la selección
+                });
+                baseDesigns.appendChild(designDiv); // Agregar el diseño al contenedor
+            });
         }
 
-        fetch('<?php echo BASE_URL; ?>personalizar/recibirPersonalizacion', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                imagen: dataURL,
-                size: size,
-                type: type,
-                cantidad: cantidad
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alertaPerzonalizada('Su personalización ha sido enviada.', 'success');
-                setTimeout(() => window.location.reload(), 2000);
-            } else {
-                alertaPerzonalizada('Error al enviar la personalización.', 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alertaPerzonalizada('Error al enviar la personalización.', 'error');
+        // Función para manejar la selección de diseño
+        function selectDesign(design) {
+            selectedDesign = design;
+            loadBottleImage();
+        }
+
+        // Cargar diseños iniciales
+        loadBaseDesigns();
+
+        // Establecer diseño seleccionado por defecto y cargar imagen de botella
+        selectedDesign = designs[0];
+        loadBottleImage();
+
+        // Función para cargar una imagen y devolver una promesa
+        function loadImage(src) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = src;
+            });
+        }
+
+        // Modificar la función loadBottleImage para devolver una promesa
+        function loadBottleImage() {
+            return loadImage(selectedDesign.image).then(envase => {
+                const dimensions = bottleDimensions[selectedDesign.id];
+                canvas.width = envase.width;
+                canvas.height = envase.height;
+                ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas
+                ctx.drawImage(envase, 0, 0); // Dibujar la imagen del envase en el canvas
+                return envase;
+            });
+        }
+
+        // Event listeners para las pestañas
+        tabs.forEach(tab => {
+            tab.addEventListener("click", () => {
+                tabs.forEach(t => t.classList.remove("active")); // Remover clase 'active' de todas las pestañas
+                tab.classList.add("active"); // Agregar clase 'active' a la pestaña clickeada
+                tabContents.forEach(content => content.classList.add("hidden")); // Ocultar todos los contenidos de pestañas
+                document.getElementById(tab.dataset.tab).classList.remove("hidden"); // Mostrar el contenido de la pestaña seleccionada
+            });
         });
-    });
 
-    // Cancelar personalización
-    document.getElementById('cancelBtn').addEventListener('click', function() {
-        window.location.reload();
-    });
+        // Manejar el evento de carga de archivo
+        fileUpload.addEventListener("change", (event) => {
+            const file = event.target.files[0]; // Obtener el archivo subido
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const userImageSrc = e.target.result; // Obtener la fuente de la imagen del usuario
 
-    // Mostrar alertas personalizadas
-    function alertaPerzonalizada(mensaje, tipo) {
-        alert(mensaje);
-    }
+                    // Cargar la imagen del envase y la imagen del usuario
+                    Promise.all([
+                        loadBottleImage(),          // Cargar imagen del envase
+                        loadImage(userImageSrc)     // Cargar imagen del usuario
+                    ]).then(([envaseImg, userImg]) => {
+                        const iw = userImg.width;
+                        const ih = userImg.height;
+                        const dimensions = bottleDimensions[selectedDesign.id];
+                        const yOffset = dimensions.yOffset; // Desplazamiento en Y para posicionar la imagen
+                        const a = dimensions.a; // Ancho de la curva (ajustar según la botella)
+                        const b = dimensions.b; // Factor de curvatura (ajustar para modificar el efecto)
+                        const scaleFactor = iw / (4 * a); // Calcular factor de escala
+
+                        // Dibujar la imagen del usuario con distorsión elíptica
+                        dimensions.xOffsets.forEach((xOffset) => {
+                            for (let X = 0; X < 2 * a; X += 1) {
+                                const y = b / a * Math.sqrt(a * a - (X - a) * (X - a));
+                                const srcX = Math.floor(X * scaleFactor);
+                                const srcWidth = Math.ceil(iw / (2 * a));
+                                ctx.drawImage(
+                                    userImg,
+                                    srcX,
+                                    0,
+                                    srcWidth,
+                                    ih,
+                                    X + xOffset,
+                                    y + yOffset,
+                                    1,
+                                    dimensions.height - yOffset * 2
+                                );
+                            }
+                        });
+                    }).catch((error) => {
+                        console.error('Error al cargar las imágenes:', error);
+                    });
+                };
+                reader.readAsDataURL(file); // Leer el archivo subido como una URL de datos
+            }
+        });
+
+        // Función para cargar productos predefinidos
+        function loadPredefinedProducts() {
+            const predefinedProducts = [
+                { id: 1, name: "Diseño Floral", image: "<?php echo BASE_URL; ?>assets/images/producto_floral.png" },
+                { id: 2, name: "Diseño Geométrico", image: "<?php echo BASE_URL; ?>assets/images/producto_geometrico.png" },
+                { id: 3, name: "Diseño Vintage", image: "<?php echo BASE_URL; ?>assets/images/producto_vintage.png" },
+                { id: 4, name: "Diseño Moderno", image: "<?php echo BASE_URL; ?>assets/images/producto_moderno.png" },
+                { id: 5, name: "Diseño Abstracto", image: "<?php echo BASE_URL; ?>assets/images/producto_abstracto.png" },
+            ];
+
+            predefinedDesigns.innerHTML = ''; // Limpiar productos predefinidos existentes
+            predefinedProducts.forEach(product => {
+                // Crear un nuevo elemento div para cada producto predefinido
+                const productDiv = document.createElement("div");
+                productDiv.classList.add("predefined-product");
+                productDiv.innerHTML = `<img src="${product.image}" alt="${product.name}"><p>${product.name}</p>`;
+                predefinedDesigns.appendChild(productDiv); // Agregar el producto al contenedor
+            });
+        }
+
+        // Función para cargar productos en el carrusel
+        function loadCarouselProducts() {
+            const carouselProducts = [
+                { id: 1, name: "Edición Especial", image: "<?php echo BASE_URL; ?>assets/images/carrusel1.png" },
+                { id: 2, name: "Colección Limitada", image: "<?php echo BASE_URL; ?>assets/images/carrusel2.png" },
+                { id: 3, name: "Nuevo Lanzamiento", image: "<?php echo BASE_URL; ?>assets/images/carrusel3.png" },
+            ];
+
+            carouselProducts.forEach(product => {
+                const itemDiv = document.createElement("div");
+                itemDiv.classList.add("carousel-item");
+                itemDiv.innerHTML = `<div class="predefined-product"><img src="${product.image}" alt="${product.name}"><p>${product.name}</p></div>`;
+                carouselInner.appendChild(itemDiv);
+            });
+        }
+
+        // Controles del carrusel
+        carouselPrev.addEventListener('click', () => {
+            carouselIndex = (carouselIndex > 0) ? carouselIndex - 1 : 0;
+            updateCarousel();
+        });
+
+        carouselNext.addEventListener('click', () => {
+            const maxIndex = carouselInner.children.length - 1;
+            carouselIndex = (carouselIndex < maxIndex) ? carouselIndex + 1 : maxIndex;
+            updateCarousel();
+        });
+
+        function updateCarousel() {
+            const offset = -carouselIndex * 100;
+            carouselInner.style.transform = `translateX(${offset}%)`;
+        }
+
+        // Cargar productos predefinidos y del carrusel al cargar la página
+        loadPredefinedProducts();
+        loadCarouselProducts();
+
+        // Manejar el botón de solicitar personalización
+        saveProductBtn.addEventListener('click', function() {
+            const dataURL = canvas.toDataURL('image/png');
+            const type = licorType.value;
+            const cantidad = parseInt(productQuantity.value, 10);
+            const size = selectedDesign.id.includes('small') ? 'small' : selectedDesign.id.includes('medium') ? 'medium' : 'large';
+
+            if (cantidad <= 0) {
+                alertaPerzonalizada('Por favor, ingrese una cantidad válida.', 'warning');
+                return;
+            }
+            fetch('<?php echo BASE_URL; ?>personalizar/recibirPersonalizacion', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        imagen: dataURL,
+                        size: size,
+                        type: type,
+                        cantidad: cantidad
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alertaPerzonalizada('Su personalización ha sido enviada.', 'success');
+                        setTimeout(() => window.location.reload(), 2000);
+                    } else {
+                        alertaPerzonalizada('Error al enviar la personalización.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alertaPerzonalizada('Error al enviar la personalización.', 'error');
+                });
+        });
+
+        // Cancelar personalización
+        cancelBtn.addEventListener('click', function() {
+            window.location.reload();
+        });
+
+        // Mostrar alertas personalizadas
+        function alertaPerzonalizada(mensaje, tipo) {
+            alert(mensaje);
+        }
+
+        // Función para desplazar la página a la sección de personalización
+        function scrollToCustomize() {
+            document.getElementById('customize').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    });
 </script>

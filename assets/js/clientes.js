@@ -112,10 +112,16 @@ function registrarPedido(datos) {
     const url = base_url + 'clientes/registrarPedido';
     const http = new XMLHttpRequest();
     http.open('POST', url, true);
+    http.withCredentials = true;
+    http.setRequestHeader('Content-Type', 'application/json;charset=UTF-8'); // quizas
     http.send(JSON.stringify({
         pedidos: datos,
         productos: listaCarrito
     }));
+      console.log('Datos que se enviarán al servidor:', dataToSend);
+
+    //http.send(JSON.stringify(dataToSend));
+
     http.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText);

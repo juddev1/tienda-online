@@ -17,6 +17,8 @@ class Personalizar extends Controller {
        
     }
 
+   
+
     public function saveImage() {
         // Verificar si el usuario está autenticado
         if (!isset($_SESSION['idCliente'])) {

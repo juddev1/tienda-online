@@ -127,13 +127,41 @@ class Clientes extends Controller
         }
     }
     //registrar pedidos
-    public function registrarPedido()
-    {
-        $datos = file_get_contents('php://input');
-        $json = json_decode($datos, true);
-        $pedidos = $json['pedidos'];
-        $productos = $json['productos'];
-        if (is_array($pedidos) && is_array($productos)) {
+    public function guardarSucursal() {
+      
+        if (isset($_POST['sucursal'])) {
+            $_SESSION['sucursal'] = $_POST['sucursal'];
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'No se recibió la sucursal.']);
+        }
+    }
+
+    public function registrarPedido() {
+        $input = file_get_contents('php://input');
+    $data = json_decode($input, true);  
+        if (isset($data['pedidos']) && isset($data['productos'])) {
+            $pedidos = $data['pedidos'];
+            $productos = $data['productos'];
+            $id_cliente = $_SESSION['idCliente'] ?? null;
+            $sucursal = $_SESSION['sucursal'] ?? null;
+
+            error_log('ID Cliente: ' . $id_cliente);
+            error_log('Sucursal: ' . $sucursal);
+
+            if (empty($id_cliente)) {
+                $mensaje = array('msg' => 'Usuario no autenticado', 'icono' => 'error');
+                echo json_encode($mensaje);
+                return;
+            } 
+            if (empty($pedidos['id'])) {
+                error_log('id_transaccion está vacío o no definido.');
+                $mensaje = array('msg' => 'Datos insuficientes: id_transaccion', 'icono' => 'error');
+                echo json_encode($mensaje);
+                return;
+            }
+            //quizas
+
             $id_transaccion = $pedidos['id'];
             $monto = $pedidos['purchase_units'][0]['amount']['value'];
             $estado = $pedidos['status'];
@@ -143,7 +171,7 @@ class Clientes extends Controller
             $apellido = $pedidos['payer']['name']['surname'];
             $direccion = $pedidos['purchase_units'][0]['shipping']['address']['address_line_1'];
             $ciudad = $pedidos['purchase_units'][0]['shipping']['address']['admin_area_2'];
-            $id_cliente = $_SESSION['idCliente'];
+
             $data = $this->model->registrarPedido(
                 $id_transaccion,
                 $monto,
@@ -154,8 +182,10 @@ class Clientes extends Controller
                 $apellido,
                 $direccion,
                 $ciudad,
-                $id_cliente
+                $id_cliente,
+                $sucursal
             );
+
             if ($data > 0) {
                 foreach ($productos as $producto) {
                     $temp = $this->model->getProducto($producto['idProducto']);
@@ -165,13 +195,15 @@ class Clientes extends Controller
             } else {
                 $mensaje = array('msg' => 'error al registrar el pedido', 'icono' => 'error');
             }
+            echo json_encode($mensaje);
         } else {
-            $mensaje = array('msg' => 'error fatal con los datos', 'icono' => 'error');
+            // Datos de pedido o productos no recibidos
+            error_log('No se recibieron los datos necesarios para registrar el pedido.');
+            $mensaje = array('msg' => 'Datos insuficientes para registrar el pedido', 'icono' => 'error');
+            echo json_encode($mensaje);
         }
-        echo json_encode($mensaje);
-        die();
     }
-    //listar productos pendientes
+        //listar productos pendientes
     public function listarPendientes()
     {
         $id_cliente = $_SESSION['idCliente'];
