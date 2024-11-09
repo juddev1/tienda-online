@@ -83,11 +83,17 @@ class PersonalizarModel extends Query {
 
     public function insertarPersonalizacion($idCliente, $imagen, $size, $type, $cantidad)
 {
-    $fechaSubida = date('Y-m-d H:i:s');
-    $sql = "INSERT INTO imagenes_personalizadas (id_cliente, ruta_imagen, fecha_subida, size, type, cantidad)
-            VALUES (?, ?, ?, ?, ?, ?)";
-    $datos = array($idCliente, $imagen, $fechaSubida, $size, $type, $cantidad);
-    return $this->insertar($sql, $datos);
+    try {
+        $fechaSubida = date('Y-m-d H:i:s');
+        $sql = "INSERT INTO imagenes_personalizadas (id_cliente, ruta_imagen, fecha_subida, size, type, cantidad)
+                VALUES (?, ?, ?, ?, ?, ?)";
+        $datos = array($idCliente, $imagen, $fechaSubida, $size, $type, $cantidad);
+        return $this->insertar($sql, $datos);
+    } catch (Exception $e) {
+        // Registrar el error o mostrar un mensaje
+        error_log('Error al insertar personalización: ' . $e->getMessage());
+        return false;
+    }
 }
 
 }

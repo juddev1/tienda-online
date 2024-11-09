@@ -126,6 +126,69 @@ class Clientes extends Controller
             die();
         }
     }
+
+
+    public function enviarCorreoPedido($emailCliente, $nombreCliente, $idPedido) {
+        // Obtener detalles del pedido y productos
+        $pedido = $this->model->getPedido($idPedido);
+        $productos = $this->model->verPedidos($idPedido);
+    
+        // Construir el cuerpo del correo electrónico
+        $contenido = '<h2>Gracias por tu compra, ' . $nombreCliente . '!</h2>';
+        $contenido .= '<p>Tu pedido ha sido registrado con éxito. A continuación, los detalles de tu pedido:</p>';
+        $contenido .= '<h3>Pedido N° ' . $idPedido . '</h3>';
+        $contenido .= '<table border="1" cellpadding="5" cellspacing="0">';
+        $contenido .= '<tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th></tr>';
+        $total = 0;
+        foreach ($productos as $producto) {
+            $subtotal = $producto['precio'] * $producto['cantidad'];
+            $contenido .= '<tr>';
+            $contenido .= '<td>' . $producto['producto'] . '</td>';
+            $contenido .= '<td>' . $producto['cantidad'] . '</td>';
+            $contenido .= '<td>' . $producto['precio'] . '</td>';
+            $contenido .= '<td>' . number_format($subtotal, 2) . '</td>';
+            $contenido .= '</tr>';
+            $total += $subtotal;
+        }
+        $contenido .= '<tr><td colspan="3"><strong>Total</strong></td><td><strong>' . number_format($total, 2) . '</strong></td></tr>';
+        $contenido .= '</table>';
+        $contenido .= '<p>Recogerás tu pedido en la sucursal: ' . $pedido['sucursal'] . '</p>';
+        $contenido .= '<p>¡Gracias por confiar en nosotros!</p>';
+    
+        // Enviar el correo electrónico
+        $mail = new PHPMailer(true);
+        try {
+            // Configuración del servidor SMTP
+            $mail->isSMTP();
+            $mail->Host       = HOST_SMTP;
+            $mail->SMTPAuth   = true;
+            $mail->Username   = USER_SMTP;
+            $mail->Password   = PASS_SMTP;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->Port       = PUERTO_SMTP;
+    
+            // Remitente y destinatario
+            $mail->setFrom('danielhuachuhuillca1@gmail.com', TITLE);
+            $mail->addAddress($emailCliente, $nombreCliente);
+    
+            // Contenido del correo
+            $mail->isHTML(true);
+            $mail->Subject = 'Confirmación de tu pedido N° ' . $idPedido;
+            $mail->Body    = $contenido;
+            $mail->AltBody = 'Gracias por tu compra. Tu pedido ha sido registrado con éxito.';
+    
+            $mail->send();
+        } catch (Exception $e) {
+            // Manejo de errores
+            error_log('Error al enviar correo de pedido: ' . $mail->ErrorInfo);
+        }
+    }
+    
+
+
+
+
+
     //registrar pedidos
     public function guardarSucursal() {
       
@@ -139,28 +202,30 @@ class Clientes extends Controller
 
     public function registrarPedido() {
         $input = file_get_contents('php://input');
-    $data = json_decode($input, true);  
+        $data = json_decode($input, true);  
         if (isset($data['pedidos']) && isset($data['productos'])) {
             $pedidos = $data['pedidos'];
             $productos = $data['productos'];
             $id_cliente = $_SESSION['idCliente'] ?? null;
             $sucursal = $_SESSION['sucursal'] ?? null;
-
-            error_log('ID Cliente: ' . $id_cliente);
-            error_log('Sucursal: ' . $sucursal);
-
+            
             if (empty($id_cliente)) {
                 $mensaje = array('msg' => 'Usuario no autenticado', 'icono' => 'error');
                 echo json_encode($mensaje);
                 return;
             } 
+    
             if (empty($pedidos['id'])) {
-                error_log('id_transaccion está vacío o no definido.');
                 $mensaje = array('msg' => 'Datos insuficientes: id_transaccion', 'icono' => 'error');
                 echo json_encode($mensaje);
                 return;
             }
-            //quizas
+    
+            // Obtener el correo y nombre del cliente desde la base de datos
+        $cliente = $this->model->getClienteById($id_cliente);
+        $emaillog = $cliente['correo'];
+        $nombrelog = $cliente['nombre'];
+
 
             $id_transaccion = $pedidos['id'];
             $monto = $pedidos['purchase_units'][0]['amount']['value'];
@@ -171,8 +236,9 @@ class Clientes extends Controller
             $apellido = $pedidos['payer']['name']['surname'];
             $direccion = $pedidos['purchase_units'][0]['shipping']['address']['address_line_1'];
             $ciudad = $pedidos['purchase_units'][0]['shipping']['address']['admin_area_2'];
-
-            $data = $this->model->registrarPedido(
+    
+            // Registrar el pedido en la base de datos
+            $pedidoRegistrado = $this->model->registrarPedido(
                 $id_transaccion,
                 $monto,
                 $estado,
@@ -185,24 +251,28 @@ class Clientes extends Controller
                 $id_cliente,
                 $sucursal
             );
-
-            if ($data > 0) {
+    
+            if ($pedidoRegistrado > 0) {
                 foreach ($productos as $producto) {
                     $temp = $this->model->getProducto($producto['idProducto']);
-                    $this->model->registrarDetalle($temp['nombre'], $temp['precio'], $producto['cantidad'], $data, $producto['idProducto']);
+                    $this->model->registrarDetalle($temp['nombre'], $temp['precio'], $producto['cantidad'], $pedidoRegistrado, $producto['idProducto']);
                 }
-                $mensaje = array('msg' => 'pedido registrado', 'icono' => 'success');
+    
+                // Enviar correo de confirmación de pedido
+                $this->enviarCorreoPedido($emaillog, $nombrelog, $pedidoRegistrado);
+    
+                $mensaje = array('msg' => 'Pedido registrado y correo enviado', 'icono' => 'success');
             } else {
-                $mensaje = array('msg' => 'error al registrar el pedido', 'icono' => 'error');
+                $mensaje = array('msg' => 'Error al registrar el pedido', 'icono' => 'error');
             }
             echo json_encode($mensaje);
         } else {
             // Datos de pedido o productos no recibidos
-            error_log('No se recibieron los datos necesarios para registrar el pedido.');
             $mensaje = array('msg' => 'Datos insuficientes para registrar el pedido', 'icono' => 'error');
             echo json_encode($mensaje);
         }
     }
+    
         //listar productos pendientes
     public function listarPendientes()
     {

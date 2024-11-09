@@ -17,6 +17,20 @@ class PedidosModel extends Query{
         return $this->save($sql, $array);
     }
 
+    public function getPedido($idPedido)
+{
+    $sql = "SELECT * FROM pedidos WHERE id = ?";
+    return $this->select($sql, [$idPedido]);
+}
+
+public function getClienteById($idCliente)
+{
+    $sql = "SELECT * FROM clientes WHERE id = ?";
+    return $this->select($sql, [$idCliente]);
+}
+
+
+
     
 }
  
