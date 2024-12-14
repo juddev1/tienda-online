@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,12 +30,10 @@
    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
    <!-- font awesome -->
    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-   <!--  -->
    <!-- owl stylesheets -->
    <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Poppins:400,700&display=swap&subset=latin-ext" rel="stylesheet">
    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/principal/css/owl.carousel.min.css">
    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/principal/css/owl.theme.default.min.css">
-
    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/principal/slick/slick.css">
    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/principal/slick/slick-theme.css">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
@@ -46,18 +43,27 @@
       .table>tbody>tr>td {
          vertical-align: middle;
       }
+      .previsualizacion-sucursal {
+         font-size: 16px;
+         color: #333;
+         margin-left: 15px;
+         display: inline-flex;
+         align-items: center;
+      }
+      .previsualizacion-sucursal i {
+         margin-right: 5px;
+         color: #007bff;
+      }
+      .previsualizacion-sucursal strong {
+         color: #007bff;
+      }
    </style>
-
-
-
 </head>
 
 <body>
    <!-- banner bg main start -->
    <div class="banner_bg_main">
       <!-- header top section start -->
-      <!-- header top section start -->
-      <!-- logo section start -->
       <div class="logo_section">
          <div class="container">
             <div class="row">
@@ -89,7 +95,6 @@
                   </div>
                </div>
                <div class="main">
-                  <!-- Another variation with a button -->
                   <div class="input-group">
                      <input type="text" class="form-control" placeholder="¿Que estas buscando?" id="search">
                      <div class="input-group-append">
@@ -101,36 +106,36 @@
                   <div class="position-absolute row" id="resultBusqueda" style="z-index: 99999;"></div>
                </div>
                <div class="header_box">
-                  <div class="login_menu">
-                     <ul>
-                     <li><a href="<?php echo BASE_URL; ?>index.php?url=personalizar/index">
+   <div class="login_menu">
+      <ul>
+         <li><a href="<?php echo BASE_URL; ?>index.php?url=personalizar/index">
                <i class="fa fa-paint-brush" aria-hidden="true"></i>
                <span class="padding_10">Regalos</span></a>
          </li>
-                        <li><a href="#" id="verCarrito">
-                              <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                              <span class="padding_10" id="btnCantidadCarrito">Cart</span></a>
-                        </li>
-                        <li><a href="#" data-toggle="modal" data-target="#modalRetiroTienda">
-               <i class="fa fa-store" aria-hidden="true"></i>
-               <span class="padding_10">Retiro en Tienda</span></a>
+         <li><a href="#" id="verCarrito">
+               <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+               <span class="padding_10" id="btnCantidadCarrito">Cart</span></a>
          </li>
-                        <?php if (empty($_SESSION['nombreCliente'])) {
-                           echo '<li><a href="#" data-toggle="modal" data-target="#modalLogin">
-                                 <i class="fa fa-user" aria-hidden="true"></i>
-                                 <span class="padding_10">Login</span></a>
-                           </li>';
-                        } else {
-                           echo '<li><a href="' . BASE_URL . 'clientes">
-                                 <i class="fa fa-user" aria-hidden="true"></i>
-                                 <span class="padding_10 text-capitalize">' . $_SESSION['nombreCliente'] . '</span></a>
-                           </li>';
-                        }
-                        ?>
+         <li><a href="#" data-toggle="modal" data-target="#modalRetiroTienda">
+               <i class="fa fa-store" aria-hidden="true"></i>
+               <span class="padding_10" id="sucursalSeleccionada">Retiro en tienda: <strong>Selecciona una sucursal</strong></span></a>
+         </li>
+         <?php if (empty($_SESSION['nombreCliente'])) {
+            echo '<li><a href="#" data-toggle="modal" data-target="#modalLogin">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                  <span class="padding_10">Login</span></a>
+            </li>';
+         } else {
+            echo '<li><a href="' . BASE_URL . 'clientes">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                  <span class="padding_10 text-capitalize">' . $_SESSION['nombreCliente'] . '</span></a>
+            </li>';
+         }
+         ?>
+      </ul>
+   </div>
+</div>
 
-                     </ul>
-                  </div>
-               </div>
             </div>
          </div>
       </div>
@@ -151,9 +156,9 @@
                      <div class="form-group">
                         <label for="sucursal">Sucursales Disponibles</label>
                         <select class="form-control" id="sucursal" name="sucursal">
-                           <option value="sucursal1">Santiago de Surco 1 - Pje. Pallasca, Santiago de Surco 15049</option>
-                           <option value="sucursal2">Santiago de Surco 2 - Avenida, Jr. El Sol 291, Santiago de Surco 15054</option>
-                           <option value="sucursal3">San Borja 3 - Av. San Luis 2551, San Borja 15037</option>
+                           <option value="Santiago de Surco 1">Santiago de Surco 1 - Pje. Pallasca, Santiago de Surco 15049</option>
+                           <option value="Santiago de Surco 2">Santiago de Surco 2 - Avenida, Jr. El Sol 291, Santiago de Surco 15054</option>
+                           <option value="San Borja 3">San Borja 3 - Av. San Luis 2551, San Borja 15037</option>
                         </select>
                      </div>
                      <button type="submit" class="btn btn-primary">Confirmar</button>
@@ -163,33 +168,47 @@
          </div>
       </div>
       <script>
-      document.getElementById('formRetiroTienda').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const sucursal = document.getElementById('sucursal').value;
-      alert('Has seleccionado la ' + sucursal);
+         document.addEventListener('DOMContentLoaded', function() {
+            const sucursalGuardada = localStorage.getItem('sucursalSeleccionada');
+            if (sucursalGuardada) {
+               document.getElementById('sucursalSeleccionada').innerHTML = `Retiro en: <strong>${sucursalGuardada}</strong>`;
+            }
+         });
 
-      // Guardar la selección de la sucursal en la sesión del usuario
-      fetch('<?php echo BASE_URL; ?>index.php?url=clientes/guardarSucursal', {
-         method: 'POST',
-         credentials: 'include',
-         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-         },
-         body: 'sucursal=' + encodeURIComponent(sucursal)
-      })
-      .then(response => response.json())
-      .then(data => {
-         if (data.status === 'success') {
-            alert('Sucursal guardada correctamente.');
-         } else {
-            alert('Error al guardar la sucursal.');
-         }
-      })
-      .catch(error => {
-         console.error('Error:', error);
-         alert('Error al guardar la sucursal.');
-      });
+         document.getElementById('formRetiroTienda').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const sucursal = document.getElementById('sucursal').value;
 
-      $('#modalRetiroTienda').modal('hide');
-   });
-</script>
+            // Actualizar la previsualización en el header
+            document.getElementById('sucursalSeleccionada').innerHTML = `Retiro en: <strong>${sucursal}</strong>`;
+
+            // Guardar en localStorage
+            localStorage.setItem('sucursalSeleccionada', sucursal);
+
+            // Guardar en la sesión del servidor
+            fetch('<?php echo BASE_URL; ?>index.php?url=clientes/guardarSucursal', {
+               method: 'POST',
+               credentials: 'include',
+               headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded'
+               },
+               body: 'sucursal=' + encodeURIComponent(sucursal)
+            })
+            .then(response => response.json())
+            .then(data => {
+               if (data.status === 'success') {
+                  alert('Sucursal guardada correctamente.');
+               } else {
+                  alert('Error al guardar la sucursal.');
+               }
+            })
+            .catch(error => {
+               console.error('Error:', error);
+               alert('Error al guardar la sucursal.');
+            });
+
+            $('#modalRetiroTienda').modal('hide');
+         });
+      </script>
+</body>
+</html>

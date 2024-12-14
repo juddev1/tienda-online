@@ -247,7 +247,7 @@ include_once 'Views/template/header-principal.php';
 <section id="header-description">
     <div class="text-content">
         <h2>Regalos Personalizados</h2>
-        <p>Bienvenidos a Japi Beer, el lugar de regalos personalizados donde la tradición de un licor se une con la innovación del diseño personalizado.</p>
+        <p>Bienvenidos a Jappi Beer, el lugar de regalos personalizados donde la tradición de un licor se une con la innovación del diseño personalizado.</p>
         <p>Nuestra web es el destino predilecto para aquellos que buscan regalos únicos y memorables, ofreciendo una amplia gama de opciones para personalizar envases de acuerdo a un vodka, whisky y ron deseados, ideales para cualquier ocasión.</p>
         <p>Descubre el arte de regalar con un toque personal en Japi Beer.</p>
         <button onclick="scrollToCustomize()">¡Quiero empezar con el diseño de mi Pisco!</button>
@@ -364,7 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const bottleDimensions = {
         'classic_small': {
             width: 950, // Ancho de la imagen del envase con dos botellas
-            height: 400,
+            height: 401,
             xOffsets: [140, 332], // Posiciones x de las dos botellas
             yOffset: 90,
             a: 70, // Parámetros para la distorsión elíptica
@@ -374,7 +374,7 @@ document.addEventListener("DOMContentLoaded", () => {
         'classic_medium': {
             width: 800,
             height: 450,
-            xOffsets: [155, 325],
+            xOffsets: [156, 332],
             yOffset: 90,
             a: 55,
             b: 20,
