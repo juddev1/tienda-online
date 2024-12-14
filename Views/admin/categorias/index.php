@@ -10,7 +10,7 @@
                     <tr>
                         <th>#</th>
                         <th>Nombre</th>
-                        <th></th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
